@@ -1,0 +1,25 @@
+**/obj
+**/bin
+**/.DS_Store
+**/publish
+**/.config
+
+# Project-specific files
+**/Logs/*/*.log
+**/Logs/*/*/*.log
+**/Configurations/*.json
+**/Certificates/*.pfx
+**/Releases/*.zip
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# VisualStudio-specific files
+**/.vs
+
+# Todo files
+*.todo
