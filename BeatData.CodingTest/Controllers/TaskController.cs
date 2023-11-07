@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BeatData.CodingTest.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("")]
 public class TaskController : BaseController
 {
     private readonly ILogger<TaskController> Logger;
@@ -18,7 +18,7 @@ public class TaskController : BaseController
         this.TaskService = taskService;
     }
 
-    [HttpGet("")]
+    [HttpGet("getAllTask")]
     [ProducesResponseType(typeof(ApiResponse<List<Models.Api.Commons.Task>?>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetTasks(
         [FromQuery(Name = "limit")] int? limit,
@@ -37,11 +37,12 @@ public class TaskController : BaseController
         }
     }
 
-    [HttpGet("user")]
+    [HttpGet("getTaskByUser")]
     [ProducesResponseType(typeof(ApiResponse<List<Models.Api.Commons.Task>?>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetTasksByUser(
         [FromQuery(Name = "limit")] int? limit,
-        [FromQuery(Name = "offset")] int? userId,
+        // Corretto nome da userId a offset
+        [FromQuery(Name = "offset")] int? offset,
         [FromQuery(Name = "userId")] int userId
     )
     {

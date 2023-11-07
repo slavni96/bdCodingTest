@@ -94,37 +94,39 @@ public class TaskService : BaseService, ITaskService
         }
     }
 
-    // TODO: Refactor this method
+    //TODO: Refactor this method
+    //private List<Models.Api.Commons.Task>? GetTasksWithRelations(List<Models.Api.Commons.Task>? tasks, List<User>? users)
+    //{
+    //    foreach (var task in tasks)
+    //    {
+    //        var apiUsers = this.GetUsersData().Result;
+
+    //        foreach (var user in apiUsers)
+    //        {
+    //            if (user.ID == task.UserID)
+    //            {
+    //                task.User = user;
+    //            }
+    //        }
+    //    }
+
+    //    return tasks;
+    //}
+
     private List<Models.Api.Commons.Task>? GetTasksWithRelations(List<Models.Api.Commons.Task>? tasks, List<User>? users)
     {
-        foreach (var task in tasks)
-        {
-            var apiUsers = this.GetUsersData().Result;
-
-            foreach (var user in apiUsers)
-            {
-                if (user.ID == task.UserID)
-                {
-                    task.User = user;
-                }
-            }
-        }
-
-        return tasks;
+        var apiUsers = this.GetUsersData().Result;
+        var filteredTasks = tasks?.Select(x => { x.User = apiUsers?.SingleOrDefault(t => t.ID == x.UserID); return x; }).ToList();
+        return filteredTasks;
     }
 
     public async Task<List<Models.Api.Commons.Task>?> GetFilteredTasks(int? limit, int? offset, int? userId = null)
     {
-        var tasks = (await this.GetTasksData()).AsQueryable();
+        var tasks = (await this.GetTasksData())?.AsQueryable();
         var users = await this.GetUsersData();
 
-        if (userId != null)
+        if (userId != null && userId > 0)
         {
-            if (userId == 0)
-            {
-                userId = null;
-            }
-
             tasks = tasks?.Where(x => x.UserID == userId.Value);
         }
 
@@ -133,7 +135,7 @@ public class TaskService : BaseService, ITaskService
             tasks = tasks?.Skip(offset.Value);
         }
 
-        if (limit != null)
+        if (limit != null && limit > 0)
         {
             tasks = tasks?.Take(limit.Value);
         }
@@ -141,12 +143,13 @@ public class TaskService : BaseService, ITaskService
         return this.GetTasksWithRelations(tasks?.ToList(), users);
     }
 
-    public Task<List<Models.Api.Commons.Task>?> GetTasks(int? limit, int? offset)
+    public async Task<List<Models.Api.Commons.Task>?> GetTasks(int? limit, int? offset)
     {
         return await this.GetFilteredTasks(limit, offset);
     }
 
-    public List<Models.Api.Commons.Task>? GetTasksByUser(int? limit, int? offset, int userId)
+    //Corretto il return Type del metodo
+    public async Task<List<Models.Api.Commons.Task>?> GetTasksByUser(int? limit, int? offset, int userId)
     {
         return await this.GetFilteredTasks(limit, offset, userId);
     }
