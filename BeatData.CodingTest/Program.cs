@@ -7,7 +7,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ITaskService, TaskService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddRouting(options => options.LowercaseUrls = true);
+builder.Services.AddRouting();
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(builder =>
